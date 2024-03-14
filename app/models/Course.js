@@ -7,10 +7,8 @@ var courseSchema = new mongoose.Schema({
     unique: true,
     index: true,
   },
-  code: {
-    type: String,
-    required: true,
-    unique: true,
+  Advance: {
+    type: Boolean,
   },
   description: {
     type: String,

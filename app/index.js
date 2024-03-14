@@ -1,6 +1,6 @@
 const express = require("express");
-const router = express.Router();
 const app = express();
+const router = express.Router();
 const connectDB = require("./db/config");
 require("dotenv").config();
 const morgan = require("morgan");
@@ -11,6 +11,8 @@ app.use(morgan("dev"));
 
 // todo: importing routes
 const authorRoute = require("./routes/authorRoutes");
+const courseRoute = require("./routes/coursesRoutes");
+const instructorRoute = require("./routes/instructorRoutes");
 
 //! Starting Database
 connectDB();
@@ -24,5 +26,7 @@ router.get("/", (req, res) => {
 
 //routes
 router.use("/author", authorRoute);
+router.use("/course", courseRoute);
+router.use("/instructor", instructorRoute);
 
 module.exports = { app, port, router };

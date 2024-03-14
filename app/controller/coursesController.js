@@ -1,37 +1,37 @@
-// * @GET all Instructors
-const getAllInstructors = (req, res) => {
+// * @GET all Courses
+const getAllCourses = (req, res) => {
   res.status(200).json({ success: true, response: `${req.method} - was made` });
   console.log(">>>", req.method);
 };
 
-// * @GET Instructor by ID
-const getOneInstructorById = (req, res) => {
+// * @GET Course by ID
+const getOneCourseById = (req, res) => {
   res.status(200).json({ success: true, response: `${req.method} - was made` });
   console.log(">>>", req.method);
 };
 
-// * @POST Instructors
-const createNewInstructor = (req, res) => {
+// * @POST Course
+const createNewCourse = (req, res) => {
   res.status(200).json({ success: true, response: `${req.method} - was made` });
   console.log(">>>", req.method);
 };
 
-// * @UPDATE Instructor by ID
-const updateInstructorById = (req, res) => {
+// * @UPDATE Course by ID
+const updateCourseById = (req, res) => {
   res.status(200).json({ success: true, response: `${req.method} - was made` });
   console.log(">>>", req.method);
 };
 
-// * @DELETE Instructor by ID
-const deleteInstructorById = (req, res) => {
+// * @DELETE Course by ID
+const deleteCourseById = (req, res) => {
   res.status(200).json({ success: true, response: `${req.method} - was made` });
   console.log(">>>", req.method);
 };
 
 module.exports = {
-  getAllInstructors,
-  getOneInstructorById,
-  createNewInstructor,
-  updateInstructorById,
-  deleteInstructorById,
+  getAllCourses,
+  getOneCourseById,
+  createNewCourse,
+  updateCourseById,
+  deleteCourseById,
 };
