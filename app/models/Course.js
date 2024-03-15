@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Instructor = require("./Instructor");
 
 var courseSchema = new mongoose.Schema({
   title: {
@@ -7,7 +8,7 @@ var courseSchema = new mongoose.Schema({
     unique: true,
     index: true,
   },
-  Advance: {
+  advance: {
     type: Boolean,
   },
   description: {
