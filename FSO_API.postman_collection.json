@@ -1,0 +1,568 @@
+{
+	"info": {
+		"_postman_id": "461a36ea-0309-411b-839d-aba70a8e1f03",
+		"name": "FSO_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13317617"
+	},
+	"item": [
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "POST Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Course POST testing",
+									"",
+									"pm.test(\"Status code is 201 (created)\", ()=> pm.response.to.have.status(201));",
+									"",
+									"pm.test(\"Created Response has ID\", () => {",
+									"    const responseBody = pm.response.json();",
+									"   ",
+									"    pm.collectionVariables.set(\"courseId\", responseBody.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"courses\": {\n        \"_id\": \"65f79f23b99dc4bc024e9b55\",\n        \"title\": \"Dancing 202\",\n        \"advance\": true,\n        \"description\": \"find your love for dancing\",\n        \"credits\": 4\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/course",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all Courses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get all courses tests",
+									"pm.test(\"Status code is 200 (OK)\", ()=> pm.response.to.have.status(200));",
+									"",
+									"pm.test(\"Check to see if an object comes back\", () => {",
+									"    pm.expect(pm.response.json().all_Courses).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Each item has an id\", () => {",
+									"    pm.response.json().all_Courses.forEach((item) => {",
+									"        pm.expect(item).to.have.property('_id');",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/course",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Course by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Get Course by Id testing",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains courseId ID\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('_id');",
+									"   ",
+									"});",
+									"",
+									"pm.test(\"courese title matches\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.title).to.eql(\"Dancing 202\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/course/{{courseId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"course",
+								"{{courseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE Course by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 (OK)', () => pm.response.to.have.status(200))",
+									"",
+									"pm.test('Record is updated in the database', function (done) {",
+									"    const url = `${ pm.environment.get('http://localhost:3001') }/course/${ pm.environment.get('courseId') }`;",
+									"    pm.sendRequest(url, function (err, response) {",
+									"        if (err) {",
+									"            console.log(err);",
+									"            done();",
+									"        } else {",
+									"            const responseData = response.json();",
+									"            pm.expect(responseData.title).to.eql('TESTING 101');",
+									"            pm.expect(responseData.advance).to.eql(true);",
+									"            done();",
+									"        }",
+									"    });",
+									"})",
+									"",
+									"pm.test(\"Validate specific fields in the res.body\", function () {",
+									"    var responseBody = pm.response.json();",
+									"",
+									"    pm.expect(responseBody.data.advance).to.be.a('boolean');",
+									"    pm.expect(responseBody.data.description).to.be.a('string');",
+									"    pm.expect(responseBody.data.credits).to.be.a('number');",
+									"    pm.expect(responseBody.data.advance).to.be.true;",
+									" ",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"TESTING 101\",\n    \"advance\": true,\n    \"description\": \"FIND YOUR LOVE FOR TESTING!!!\",\n    \"credits\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/course/{{courseId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"course",
+								"{{courseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Course by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Delete courses by ID testing",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Proper error structure on failed deletion\", function () {",
+									"    ",
+									"    if (pm.response.code >= 400) {",
+									"        const responseBody = pm.response.json();",
+									"        pm.expect(responseBody).to.have.property('error');",
+									"        pm.expect(responseBody.error).to.have.property('message');",
+									"        pm.expect(responseBody.error).to.have.property('code');",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/course/{{courseId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"course",
+								"{{courseId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Instructors",
+			"item": [
+				{
+					"name": "POST Instructors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Post Instructor testing",
+									"pm.test(\"Status code is 200 (created)\", ()=> pm.response.to.have.status(200));",
+									"",
+									"pm.test(\"Created Response has ID\", () => {",
+									"    const responseBody = pm.response.json();",
+									"   ",
+									"    pm.collectionVariables.set(\"instructorId\", responseBody.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Instructors\": {\n        \"_id\": \"65f8e20bba6d4d9ec89be4b5\",\n        \"name\": \"Mike Testy\",\n        \"email\": \"mt_002@instructor.fullsail.edu\",\n        \"department\": \"web dev\",\n        \"office\": \"devAwesomeRoom\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/instructor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"instructor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all Instructors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get all Instructors tests",
+									"pm.test(\"Status code is 200 (OK)\", ()=> pm.response.to.have.status(200));",
+									"",
+									"pm.test(\"Check to see if an object comes back\", () => {",
+									"    pm.expect(pm.response.json().all_Instructor).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Each item has an id\", () => {",
+									"    pm.response.json().all_Instructor.forEach((item) => {",
+									"        pm.expect(item).to.have.property('_id');",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/instructor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"instructor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Instructor by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Get Instructor by Id testing",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains courseId ID\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('_id');",
+									"   ",
+									"});",
+									"",
+									"pm.test(\"courese title matches\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"Mike Testy\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/instructor/{{instructorId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"instructor",
+								"{{instructorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE Instructor by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Update Instructor by Id testing",
+									"",
+									"pm.test('Status code is 200 (OK)', () => pm.response.to.have.status(200))",
+									"",
+									"pm.test('Record is updated in the database', function (done) {",
+									"    const url = `${ pm.environment.get('http://localhost:3001') }/instructor/${ pm.environment.get('courseId') }`;",
+									"    pm.sendRequest(url, function (err, response) {",
+									"        if (err) {",
+									"            console.log(err);",
+									"            done();",
+									"        } else {",
+									"            const responseData = response.json();",
+									"            pm.expect(responseData.name).to.eql('Cool Ray');",
+									"            pm.expect(responseData.department).to.eql(\"Dance\");",
+									"            done();",
+									"        }",
+									"    });",
+									"})",
+									"",
+									"pm.test(\"Validate specific fields in the res.body\", function () {",
+									"    var responseBody = pm.response.json();",
+									"",
+									"    pm.expect(responseBody.data.name).to.be.a('string');",
+									"    pm.expect(responseBody.data.department).to.be.a('string');",
+									"    pm.expect(responseBody.data.office).to.be.a('string');",
+									" ",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \n        \"name\": \"Cool Ray\",\n        \"email\": \"sray@instructor.fullsail.edu\",\n        \"department\": \"Dance\",\n        \"office\": \"Dance_201\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/instructor/{{instructorId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"instructor",
+								"{{instructorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Instructor by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Delete Instructor by Id testing",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Proper error structure on failed deletion\", function () {",
+									"    ",
+									"    if (pm.response.code >= 400) {",
+									"        const responseBody = pm.response.json();",
+									"        pm.expect(responseBody).to.have.property('error');",
+									"        pm.expect(responseBody.error).to.have.property('message');",
+									"        pm.expect(responseBody.error).to.have.property('code');",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/instructor/{{instructorId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"instructor",
+								"{{instructorId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "courseId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "instructorId",
+			"value": ""
+		}
+	]
+}
