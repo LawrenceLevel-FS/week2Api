@@ -68,7 +68,7 @@ const updateInstructorById = async (req, res) => {
 const deleteInstructorById = async (req, res) => {
   const id = req.params.id;
   try {
-    const deleteInstructor = await Instructor.findOneAndDelete(id);
+    const deleteInstructor = await Instructor.findByIdAndDelete(id);
     res.status(200).json({
       method: `Method - ${req.method}`,
       message: "Deleted successful",

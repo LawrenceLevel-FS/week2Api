@@ -30,7 +30,7 @@ const createNewCourse = async (req, res) => {
   const { courses } = req.body;
   try {
     const newCourse = await Course.create(courses);
-    res.status(200).json({ success: true, data: `${req.body}` });
+    res.status(201).json({ id: courses._id });
     console.log(">>>", courses);
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -63,7 +63,7 @@ const updateCourseById = async (req, res) => {
 const deleteCourseById = async (req, res) => {
   const id = req.params.id;
   try {
-    const deleteCourse = await Course.findOneAndDelete(id);
+    const deleteCourse = await Course.findByIdAndDelete(id);
     res.status(200).json({
       method: `Method - ${req.method}`,
       message: "Deleted successful",
