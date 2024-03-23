@@ -1,8 +1,11 @@
 // importing course model
+const { query } = require("express");
 const Course = require("../models/Course");
 
 // * @GET all Courses
 const getAllCourses = async (req, res) => {
+  const courseString = req.query;
+  console.log("QUERY STRINGS", courseString);
   try {
     const allCourse = await Course.find();
     res.status(200).json({ all_Courses: allCourse });

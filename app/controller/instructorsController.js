@@ -1,10 +1,23 @@
 const Instructor = require("../models/Instructor");
+// const { faker } = require("@faker-js/faker");
 
 // * @GET all Instructors
 const getAllInstructors = async (req, res) => {
+  let instructorQuery = req.query;
+  const allInstructors = await Instructor.find(instructorQuery);
+
   try {
-    const allInstructors = await Instructor.find();
-    res.status(200).json({ all_Instructor: allInstructors });
+    if (instructorQuery.select) {
+      let query = instructorQuery.select;
+      let field = JSON.stringify(query).split(",").join(" ");
+      const queryInstructors = await Instructor.find({}).select(
+        JSON.parse(field)
+      );
+      console.log(query);
+      res.status(200).json({ all_Instructor: queryInstructors });
+    } else {
+      res.status(200).json({ all_Instructor: allInstructors });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
