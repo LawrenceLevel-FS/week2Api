@@ -3,23 +3,42 @@ const Instructor = require("../models/Instructor");
 
 // * @GET all Instructors
 const getAllInstructors = async (req, res) => {
-  let instructorQuery = req.query;
-  const allInstructors = await Instructor.find(instructorQuery);
-
   try {
-    if (instructorQuery.select) {
-      let query = instructorQuery.select;
-      let field = JSON.stringify(query).split(",").join(" ");
-      const queryInstructors = await Instructor.find({}).select(
-        JSON.parse(field)
-      );
-      console.log(query);
-      res.status(200).json({ all_Instructor: queryInstructors });
-    } else {
-      res.status(200).json({ all_Instructor: allInstructors });
+    // pagination setup
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 2;
+    const skip = (page - 1) * limit;
+
+    // building the query with any filters excluding special keys
+    let queryFilters = { ...req.query };
+    ["select", "sort", "page", "limit"].forEach(
+      (param) => delete queryFilters[param]
+    );
+
+    let query = Instructor.find(queryFilters);
+
+    if (req.query.select) {
+      const fields = req.query.select.split(",").join(" ");
+      query = query.select(fields);
     }
+
+    if (req.query.sort) {
+      const sort = req.query.select.split(",").join(" ");
+      query = query.sort(sort);
+    }
+
+    // Apply pagination
+    query = query.skip(skip).limit(limit);
+
+    const instructors = await query;
+
+    res
+      .status(200)
+      .json({ success: true, count: instructors.length, data: instructors });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (!res.headersSent) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
 };
 
