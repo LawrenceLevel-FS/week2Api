@@ -19,12 +19,21 @@ const getAllInstructors = async (req, res) => {
 
     if (req.query.select) {
       const fields = req.query.select.split(",").join(" ");
+      if (fields.includes("office")) {
+        console.log(fields.split(" ").splice(1));
+      }
       query = query.select(fields);
     }
 
     if (req.query.sort) {
-      const sort = req.query.select.split(",").join(" ");
+      const sort = req.query.sort.split(",").join(" ");
       query = query.sort(sort);
+    }
+
+    if (req.query.sort && req.query.select) {
+      const fields = req.query.select.split(",").join(" ");
+      const sort = req.query.sort.split(",").join(" ");
+      query = query.sort(sort).select(fields);
     }
 
     // Apply pagination
