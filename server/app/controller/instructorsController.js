@@ -19,9 +19,6 @@ const getAllInstructors = async (req, res) => {
 
     if (req.query.select) {
       const fields = req.query.select.split(",").join(" ");
-      if (fields.includes("office")) {
-        console.log(fields.split(" ").splice(1));
-      }
       query = query.select(fields);
     }
 

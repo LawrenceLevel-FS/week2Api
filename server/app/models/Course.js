@@ -18,10 +18,12 @@ var courseSchema = new mongoose.Schema({
   credits: {
     type: Number,
   },
-  instructor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Instructor",
-  },
+  instructors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Instructor",
+    },
+  ],
 });
 
 //Export the model
