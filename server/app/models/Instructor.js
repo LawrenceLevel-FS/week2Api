@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-var InstructorSchema = new mongoose.Schema({
+const InstructorSchema = new mongoose.Schema({
   name: {
     type: String,
   },

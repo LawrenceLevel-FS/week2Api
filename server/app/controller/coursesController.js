@@ -1,16 +1,51 @@
 // importing course model
 const { query } = require("express");
 const Course = require("../models/Course");
+const { populate } = require("../models/Instructor");
 
 // * @GET all Courses
 const getAllCourses = async (req, res) => {
-  const courseString = req.query;
-  console.log("QUERY STRINGS", courseString);
   try {
-    const allCourse = await Course.find();
-    res.status(200).json({ all_Courses: allCourse });
+    // Pagination setup
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
+
+    // Building the query with any filters excluding special keys
+    let queryFilters = { ...req.query };
+    ["select", "sort", "page", "limit"].forEach(
+      (param) => delete queryFilters[param]
+    );
+
+    let query = Course.find(queryFilters);
+
+    if (req.query.select) {
+      const fields = req.query.select.split(",").join(" ");
+      query = query.select(fields);
+    }
+
+    query.populate("instructors");
+
+    // Sorting
+    if (req.query.sort) {
+      const sort = req.query.sort.split(",").join(" ");
+      query = query.sort(sort);
+    }
+
+    // Apply pagination to the query
+    query = query.skip(skip).limit(limit);
+
+    const courses = await query;
+
+    res.status(200).json({
+      success: true,
+      count: courses.length,
+      data: courses,
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (!res.headersSent) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
 };
 
