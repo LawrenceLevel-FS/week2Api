@@ -11,6 +11,7 @@ const InstructorForm = ({ formTitle }) => {
     const { value, name } = e.target;
     console.log([name], value);
   };
+
   return (
     <div>
       <h1 className="text-lg font-bold text-gray-500">{formTitle}</h1>
