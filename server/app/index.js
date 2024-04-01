@@ -4,10 +4,12 @@ const router = express.Router();
 const connectDB = require("./db/config");
 require("dotenv").config();
 const morgan = require("morgan");
+const cors = require("cors");
 
 // middleware
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cors());
 
 // todo: importing routes
 const authorRoute = require("./routes/authorRoutes");
